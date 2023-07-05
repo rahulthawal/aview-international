@@ -91,7 +91,12 @@ export default function Translate() {
     }
   }, [joke]);
   return (
-    <div>
+    <div style={{
+        display: 'flex',
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
       <div className="app-body">
         <div>
           {(step === 0 || step === 1 || step === 2) && (
