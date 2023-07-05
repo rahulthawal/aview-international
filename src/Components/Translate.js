@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, TextArea, Button, Icon } from "semantic-ui-react";
 import axios from "axios";
-
 export default function Translate() {
   // To set the Joke from the API
   const [joke, setJoke] = useState("");
@@ -13,6 +12,15 @@ export default function Translate() {
   const [languagesList, setLanguagesList] = useState([]);
   // To set the questionaire step in the process
   const [step, setStep] = useState(0);
+
+  // The Language key encode Ex en means english
+  const languageKey = (selectedLanguage) => {
+    setLanguageKey(selectedLanguage.target.value);
+  };
+  // Disabled the Translate Button when language is not selected
+  const isValid =
+    selectedLanguageKey !== "Select" && selectedLanguageKey.trim().length > 0;
+
   /**
    * Function to get the random joke from the API
    */
@@ -72,10 +80,6 @@ export default function Translate() {
     }
   };
 
-  const languageKey = (selectedLanguage) => {
-    setLanguageKey(selectedLanguage.target.value);
-  };
-
   useEffect(() => {
     try {
       axios.get(`https://libretranslate.de/languages`).then((response) => {
@@ -120,7 +124,7 @@ export default function Translate() {
         {step === 2 && (
           <Form className="app-display">
             <select className="language-select" onChange={languageKey}>
-              <option>Select Language..</option>
+              <option>Select</option>
               {languagesList.map((language) => {
                 return (
                   <option key={language.code} value={language.code}>
@@ -132,11 +136,15 @@ export default function Translate() {
 
             <Form.Field
               control={TextArea}
-              placeholder="Your Result Translation.."
               value={resultText}
             />
 
-            <Button color="orange" size="large" onClick={translateText}>
+            <Button
+              disabled={!isValid}
+              color="orange"
+              size="large"
+              onClick={translateText}
+            >
               <Icon name="translate" />
               Translate
             </Button>
